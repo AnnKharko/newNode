@@ -1,0 +1,10 @@
+[
+  {"userId": "1", "nikName": "Taras", "email": "e@ml", "password": "12345"},
+  {"userId": "2", "nikName": "Anatoliy", "email": "male@ml", "password": "d43u9kf"},
+  {"userId": "3", "nikName": "Olia", "email": "ale@ml", "password": "d55vkf3"},
+  {"userId": "4", "nikName": "Adriana", "email": "emale@ml", "password": "d3kh3vk3f"},
+  {"userId": "5", "nikName": "Anna", "email": "hsh@com", "password": "126"},
+  {"userId": "6", "nikName": "Ivan", "email": "snf@com", "password": "jhfh3s"},
+  {"userId": "7", "nikName": "Nina", "email": "fjl@com", "password": "whlh3s"},
+  {"userId": "8", "nikName": "Taras", "email": "dlj@com", "password": "kzn3hw"}
+]

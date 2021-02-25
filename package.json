@@ -1,0 +1,24 @@
+{
+  "name": "hw3",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^5.2.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnnKharko/NodeJS.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AnnKharko/NodeJS/issues"
+  },
+  "homepage": "https://github.com/AnnKharko/NodeJS#readme",
+  "description": ""
+}
