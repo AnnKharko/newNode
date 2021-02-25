@@ -1,4 +1,6 @@
 const userService = require('../service/user.service');
+const errorCodes = require('../constant/errorCodes.enum');
+const statusCodes = require('../constant/statusCodes.enum')
 
 module.exports = {
     getAllUsers: (req, res) => {
@@ -7,8 +9,21 @@ module.exports = {
 
            res.json(users)
        } catch (e) {
-           res.status(400).json(e.message);
+           res.status(errorCodes.BAD_REQUEST).json(e.message);
        }
+    },
+
+    getUserByEmail: (req, res) => {
+        try {
+            const {email} = req.body;
+
+            const user = userService.findUserByEmail(email);
+
+            res.json(user);
+        } catch (e) {
+            res.status(errorCodes.BAD_REQUEST).json(e.message);
+        }
+
     },
 
     getUser: (req, res) => {
@@ -19,7 +34,7 @@ module.exports = {
 
            res.json(user);
        } catch (e) {
-           res.status(400).json(e.message);
+           res.status(errorCodes.BAD_REQUEST).json(e.message);
        }
     },
 
@@ -27,7 +42,7 @@ module.exports = {
         userService.createUser(req.body);
         console.log(req.body);
 
-        res.status(201).json('USER IS CREATED')
+        res.status(statusCodes.CREATED).json('USER IS CREATED')
     },
 
     deleteUser: (req, res) => {
@@ -35,6 +50,7 @@ module.exports = {
 
         userService.deleteUserById(userId-1);
 
-        res.json('USER IS DELETED');
+        res.status(statusCodes.OK).json('USER IS DELETED');
+
     }
 }

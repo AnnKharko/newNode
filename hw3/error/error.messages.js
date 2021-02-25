@@ -14,6 +14,14 @@ module.exports = {
    NOT_VALID_ID: {
        en: "Not valid Id",
        ua: "Недійсний ідентифікатор"
-   }
+   },
+    NOT_EXIST_USER_WITH_SUCH_EMAIL: {
+       en: "Not exist user with such email",
+       ua: "Не існує користувача з такою електронною поштою "
+    },
+    NOT_EXIST_USER_WITH_SUCH_ID: {
+        en: "Not exist user with such id",
+        ua: "Не існує користувача з таким ідентифікатором "
+    }
 
 }
