@@ -26,7 +26,7 @@ module.exports = {
             } = req.body;
 
             if (!/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(email)) {
-                // res.json(user);
+                // res.json(models);
                 throw new Error(errorMessages.NOT_VALID_EMAIL[language]);
             }
 
@@ -61,7 +61,7 @@ module.exports = {
             const userId = +req.params.userId;
 
             // if (userId) {
-            //     if ( !DB.filter(user => user.userId === userId).length) {
+            //     if ( !DB.filter(models => models.userId === userId).length) {
             //         throw new Error(errorMessages.NOT_EXIST_USER_WITH_SUCH_ID[language])
             //     }
             // }

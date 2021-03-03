@@ -39,7 +39,7 @@ app.post('/login', (req, res) => {
             }
             res.redirect(`/users/${n}`);
         } else {
-            console.log('this user exist');
+            console.log('this models exist');
             res.redirect('/registration');
         }
     });
