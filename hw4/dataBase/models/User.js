@@ -14,16 +14,16 @@ userScheme.virtual('userCars', {
     localField: 'cars',
     foreignField: '_id'
 });
-//
-// userScheme.pre('find', function() {
-//     console.log('PRE FIND HOOK');
-//     this.populate('userCars');
-// });
-//
-// userScheme.pre('findOne', function() {
-//     console.log('PRE FIND ONE HOOK');
-//
-//     this.populate('userCars');
-// });
+
+userScheme.pre('find', function() {
+    console.log('PRE FIND HOOK');
+    this.populate('userCars');
+});
+
+userScheme.pre('findOne', function() {
+    console.log('PRE FIND ONE HOOK');
+
+    this.populate('userCars');
+});
 
 module.exports = model('User', userScheme);

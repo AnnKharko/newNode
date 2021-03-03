@@ -3,7 +3,7 @@ module.exports = {
         en: 'Not valid email',
         ua: 'Недійсна електронна адреса'
     },
-    NOT_VALID_NIKNAME: {
+    NOT_VALID_NAME: {
         en: 'Not valid nikName',
         ua: 'Недійсний псевдонім'
     },
@@ -20,8 +20,31 @@ module.exports = {
         ua: 'Не існує користувача з такою електронною поштою '
     },
     NOT_EXIST_USER_WITH_SUCH_ID: {
-        en: 'Not exist models with such id',
+        en: 'Not exist user with such id',
         ua: 'Не існує користувача з таким ідентифікатором '
+    },
+    NOT_EXIST_CAR_WITH_SUCH_ID: {
+        en: 'Not exist car with such id',
+        ua: 'Не існує автомобіля з таким ідентифікатором '
+    },
+    NOT_VALID_PRODUCER: {
+        en: 'Not valid producer',
+        ua: 'Недійсний виробник'
+    },
+    NOT_VALID_MODEL: {
+        en: 'Not valid model',
+        ua: 'Недійсна модель'
+    },
+    NOT_VALID_YEAR: {
+        en: 'Not valid year',
+        ua: 'Недійсний рік'
+    },
+    NOT_VALID_PRICE: {
+        en: 'Not valid price',
+        ua: 'Недійсна ціна'
+    },
+    NOT_EXIST_CAR_WITH_SUCH_MODEL: {
+        en: 'Not exist car such model',
+        ua: 'Не існує автомобіля такої моделі'
     }
-
 };
