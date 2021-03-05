@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const carController = require('../controller/car.controller');
+const { carController } = require('../controller');
 const { carMiddleware } = require('../middleware');
 
 router.get('/', carController.getAllCars);

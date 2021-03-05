@@ -1,9 +1,6 @@
-// const userService = require('../service/user.service');
 const { errorCodesEnum } = require('../constant');
-const { userValidators } = require('../validators');
 const errorMessages = require('../error/error.messages');
-//
-// const DB = [];
+const { userValidators } = require('../validators');
 const User = require('../dataBase/models/User');
 
 module.exports = {

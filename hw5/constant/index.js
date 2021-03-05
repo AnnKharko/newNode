@@ -1,6 +1,6 @@
 module.exports = {
+    constants: require('./constants'),
     errorCodesEnum: require('./errorCodes.enum'),
-    statusCodeEnum: require('./statusCodes.enum'),
     regexpEnum: require('./regexp.enum'),
-    constants: require('./constants')
+    statusCodeEnum: require('./statusCodes.enum')
 };

@@ -1,7 +1,7 @@
-const userService = require('../service/user.service');
 const errorCodes = require('../constant/errorCodes.enum');
-const statusCodes = require('../constant/statusCodes.enum');
 const { passwordHasher } = require('../helpers');
+const statusCodes = require('../constant/statusCodes.enum');
+const userService = require('../service/user.service');
 
 module.exports = {
     getAllUsers: async (req, res) => {
