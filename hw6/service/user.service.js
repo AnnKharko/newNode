@@ -1,4 +1,4 @@
-const User = require('../dataBase/models/User');
+const { User } = require('../dataBase/models');
 
 module.exports = {
     /**

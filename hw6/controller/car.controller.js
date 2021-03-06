@@ -1,6 +1,5 @@
-const carService = require('../service/car.service');
-const errorCodes = require('../constant/errorCodes.enum');
-const statusCodes = require('../constant/statusCodes.enum');
+const { carService } = require('../service');
+const { errorCodesEnum, statusCodeEnum } = require('../constant');
 
 module.exports = {
     getAllCars: async (req, res) => {
@@ -9,7 +8,7 @@ module.exports = {
 
             res.json(cars);
         } catch (e) {
-            res.status(errorCodes.BAD_REQUEST).json(e.message);
+            res.status(errorCodesEnum.BAD_REQUEST).json(e.message);
         }
     },
 
@@ -21,7 +20,7 @@ module.exports = {
 
             res.json(car);
         } catch (e) {
-            res.status(errorCodes.BAD_REQUEST).json(e.message);
+            res.status(errorCodesEnum.BAD_REQUEST).json(e.message);
         }
     },
 
@@ -33,7 +32,7 @@ module.exports = {
 
             res.json(car);
         } catch (e) {
-            res.status(errorCodes.BAD_REQUEST).json(e.message);
+            res.status(errorCodesEnum.BAD_REQUEST).json(e.message);
         }
     },
 
@@ -41,7 +40,7 @@ module.exports = {
         try {
             await carService.createNewCar(req.body);
 
-            res.status(statusCodes.CREATED).json('CAR IS CREATED');
+            res.status(statusCodeEnum.CREATED).json('CAR IS CREATED');
         } catch (e) {
             res.json(e.message);
         }
@@ -52,6 +51,6 @@ module.exports = {
 
         await carService.deleteCarById(carId);
 
-        res.status(statusCodes.OK).json('CAR IS DELETED');
+        res.status(statusCodeEnum.OK).json('CAR IS DELETED');
     }
 };

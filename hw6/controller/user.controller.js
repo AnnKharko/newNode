@@ -1,6 +1,5 @@
-const userService = require('../service/user.service');
-const errorCodes = require('../constant/errorCodes.enum');
-const statusCodes = require('../constant/statusCodes.enum');
+const { userService } = require('../service');
+const { errorCodesEnum, statusCodeEnum } = require('../constant');
 const { passwordHasher } = require('../helpers');
 
 module.exports = {
@@ -10,7 +9,7 @@ module.exports = {
 
             res.json(users);
         } catch (e) {
-            res.status(errorCodes.BAD_REQUEST).json(e.message);
+            res.status(errorCodesEnum.BAD_REQUEST).json(e.message);
         }
     },
 
@@ -22,7 +21,7 @@ module.exports = {
 
             res.json(user);
         } catch (e) {
-            res.status(errorCodes.BAD_REQUEST).json(e.message);
+            res.status(errorCodesEnum.BAD_REQUEST).json(e.message);
         }
     },
 
@@ -34,7 +33,7 @@ module.exports = {
 
             res.json(user);
         } catch (e) {
-            res.status(errorCodes.BAD_REQUEST).json(e.message);
+            res.status(errorCodesEnum.BAD_REQUEST).json(e.message);
         }
     },
 
@@ -46,7 +45,7 @@ module.exports = {
 
             await userService.createNewUser({ ...req.body, password: hasPassword });
 
-            res.status(statusCodes.CREATED).json('USER IS CREATED');
+            res.status(statusCodeEnum.CREATED).json('USER IS CREATED');
         } catch (e) {
             res.json(e.message);
         }
@@ -58,7 +57,7 @@ module.exports = {
 
             await userService.deleteUserById(userId);
 
-            res.status(statusCodes.OK).json('USER IS DELETED');
+            res.status(statusCodeEnum.OK).json('USER IS DELETED');
         } catch (e) {
             res.json(e.message);
         }

@@ -1,8 +1,7 @@
-// const carService = require('../service/car.service');
-const { errorCodesEnum } = require('../constant');
-const { carValidators } = require('../validators');
 const errorMessages = require('../error/error.messages');
-const Car = require('../dataBase/models/Car');
+const { carValidators } = require('../validators');
+const { Car } = require('../dataBase/models');
+const { errorCodesEnum } = require('../constant');
 
 module.exports = {
     checkIsCarValid: (req, res, next) => {

@@ -1,6 +1,5 @@
-const O_Auth = require('../dataBase/models/O_Auth');
+const { O_Auth, User } = require('../dataBase/models');
 const { passwordHasher, tokenizer } = require('../helpers');
-const User = require('../dataBase/models/User');
 
 module.exports = {
     authUser: async (email, password) => {
@@ -15,8 +14,6 @@ module.exports = {
         // ==== SAVE TOKENS TO DB
         await O_Auth.create({ ...tokens, user: user._id });
         return tokens;
-
-        // res.json(tokens);
     },
     // saveTokensToDB: (tokens) => {
     // O_Auth.create({ ...tokens, user: user._id });

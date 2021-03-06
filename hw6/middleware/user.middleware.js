@@ -1,10 +1,7 @@
-// const userService = require('../service/user.service');
+const errorMessages = require('../error/error.messages');
 const { errorCodesEnum } = require('../constant');
 const { userValidators } = require('../validators');
-const errorMessages = require('../error/error.messages');
-//
-// const DB = [];
-const User = require('../dataBase/models/User');
+const { User } = require('../dataBase/models');
 
 module.exports = {
     checkIsUserValid: (req, res, next) => {

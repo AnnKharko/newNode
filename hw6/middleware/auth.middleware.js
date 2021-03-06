@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
+const { constants } = require('../constant');
 const { JWT_SECRET } = require('../configs/config');
-const O_Auth = require('../dataBase/models/O_Auth');
+const { O_Auth } = require('../dataBase/models');
 
 module.exports = {
     checkAccessToken: async (req, res, next) => {
         try {
-            const access_token = req.get('Authorization');
+            const access_token = req.get(constants.AUTHORIZATION);
 
             if (!access_token) {
                 throw new Error('token is required');
@@ -18,9 +19,6 @@ module.exports = {
             });
             // ===== CHECK DATA BASE
             const tokens = await O_Auth.findOne({ access_token }).populate('user');
-            // console.log('**************************');
-            // console.log(tokens);
-            // console.log('**************************');
 
             if (!tokens) {
                 throw new Error('Not valid token');

@@ -19,7 +19,6 @@ app.use('/', apiRouter);
 
 app.listen(PORT, () => {
     console.log('App listen 5000');
-    console.log(__dirname);
 });
 
 function _connectDB() {
