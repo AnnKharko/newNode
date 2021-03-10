@@ -1,18 +1,18 @@
 const { carService } = require('../service');
-const { errorCodesEnum, statusCodeEnum } = require('../constant');
+const { constants, statusCodeEnum } = require('../constant');
 
 module.exports = {
-    getAllCars: async (req, res) => {
+    getAllCars: async (req, res, next) => {
         try {
             const cars = await carService.findCars();
 
             res.json(cars);
         } catch (e) {
-            res.status(errorCodesEnum.BAD_REQUEST).json(e.message);
+            next(e);
         }
     },
 
-    getCarByModel: async (req, res) => {
+    getCarByModel: async (req, res, next) => {
         try {
             const { model } = req.params;
 
@@ -20,11 +20,11 @@ module.exports = {
 
             res.json(car);
         } catch (e) {
-            res.status(errorCodesEnum.BAD_REQUEST).json(e.message);
+            next(e);
         }
     },
 
-    getCar: async (req, res) => {
+    getCar: async (req, res, next) => {
         try {
             const { carId } = req.params;
 
@@ -32,25 +32,29 @@ module.exports = {
 
             res.json(car);
         } catch (e) {
-            res.status(errorCodesEnum.BAD_REQUEST).json(e.message);
+            next(e);
         }
     },
 
-    createCar: async (req, res) => {
+    createCar: async (req, res, next) => {
         try {
             await carService.createNewCar(req.body);
 
-            res.status(statusCodeEnum.CREATED).json('CAR IS CREATED');
+            res.status(statusCodeEnum.CREATED).json(constants.CAR_IS_CREATED);
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
-    deleteCar: async (req, res) => {
-        const { carId } = req.params;
+    deleteCar: async (req, res, next) => {
+        try {
+            const { carId } = req.params;
 
-        await carService.deleteCarById(carId);
+            await carService.deleteCarById(carId);
 
-        res.status(statusCodeEnum.OK).json('CAR IS DELETED');
+            res.status(statusCodeEnum.OK).json(constants.CAR_IS_DELETED);
+        } catch (e) {
+            next(e);
+        }
     }
 };

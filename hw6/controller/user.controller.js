@@ -1,19 +1,20 @@
 const { userService } = require('../service');
-const { errorCodesEnum, statusCodeEnum } = require('../constant');
+const { statusCodeEnum, constants } = require('../constant');
 const { passwordHasher } = require('../helpers');
+const { O_Auth } = require('../dataBase/models');
 
 module.exports = {
-    getAllUsers: async (req, res) => {
+    getAllUsers: async (req, res, next) => {
         try {
             const users = await userService.findUsers();
 
             res.json(users);
         } catch (e) {
-            res.status(errorCodesEnum.BAD_REQUEST).json(e.message);
+            next(e);
         }
     },
 
-    getUserByEmail: async (req, res) => {
+    getUserByEmail: async (req, res, next) => {
         try {
             const { email } = req.params;
 
@@ -21,23 +22,23 @@ module.exports = {
 
             res.json(user);
         } catch (e) {
-            res.status(errorCodesEnum.BAD_REQUEST).json(e.message);
+            next(e);
         }
     },
 
-    getUser: async (req, res) => {
+    getUser: async (req, res, next) => {
         try {
-            const { userId } = req.params;
+            const id = req.params.userId;
 
-            const user = await userService.findUserById(userId);
+            const user = await userService.findUserById(id);
 
             res.json(user);
         } catch (e) {
-            res.status(errorCodesEnum.BAD_REQUEST).json(e.message);
+            next(e);
         }
     },
 
-    createUser: async (req, res) => {
+    createUser: async (req, res, next) => {
         try {
             const { password } = req.body;
 
@@ -45,21 +46,23 @@ module.exports = {
 
             await userService.createNewUser({ ...req.body, password: hasPassword });
 
-            res.status(statusCodeEnum.CREATED).json('USER IS CREATED');
+            res.status(statusCodeEnum.CREATED).json(constants.USER_IS_CREATED);
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
-    deleteUser: async (req, res) => {
+    deleteUser: async (req, res, next) => {
         try {
             const { userId } = req.params;
+            const id = req.infoTokens;
 
             await userService.deleteUserById(userId);
+            await O_Auth.findByIdAndDelete({ _id: id });
 
-            res.status(statusCodeEnum.OK).json('USER IS DELETED');
+            res.status(statusCodeEnum.OK).json(constants.USER_IS_DELETED);
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     }
 };

@@ -1,5 +1,4 @@
-const errorMessages = require('../error/error.messages');
-const { errorCodesEnum } = require('../constant');
+const { errorCodesEnum, ErrorHandler, errorMessages } = require('../error');
 const { userValidators } = require('../validators');
 const { User } = require('../dataBase/models');
 
@@ -9,37 +8,40 @@ module.exports = {
             const { error } = userValidators.createUserValidator.validate(req.body);
 
             if (error) {
-                throw new Error(error.details[0].message);
+                throw new ErrorHandler(errorCodesEnum.BAD_REQUEST, errorMessages.BED_REQUEST, error.details[0].message);
             }
             next();
         } catch (e) {
-            res.status(errorCodesEnum.BAD_REQUEST).json(e.message);
+            next(e);
         }
     },
-    checkIsEmailExist: (req, res, next) => {
+    checkIsEmailExist: async (req, res, next) => {
         try {
-            const choseEmail = req.body.email;
-            const { language = 'en' } = req.body;
+            const choseEmail = req.params.email;
+            const findEmail = await User.find({ email: choseEmail });
 
-            if (!User.find({ email: choseEmail })) {
-                throw new Error(errorMessages.NOT_EXIST_USER_WITH_SUCH_EMAIL[language]);
+            if (!findEmail.length) {
+                throw new ErrorHandler(errorCodesEnum.NOT_FOUND, errorMessages.NOT_EXIST_USER_WITH_SUCH_EMAIL);
             }
+
             next();
         } catch (e) {
-            res.status(errorCodesEnum.NOT_FOUND).json(e.message);
+            next(e);
         }
     },
-    checkIsUserIdExist: (req, res, next) => {
+    checkIsUserIdExist: async (req, res, next) => {
         try {
-            const { userId, language = 'en' } = req.body;
+            const id = req.params.userId;
 
-            if (!User.find({ _id: userId })) {
-                throw new Error(errorMessages.NOT_EXIST_USER_WITH_SUCH_ID[language]);
+            const find = await User.find({ _id: id });
+
+            if (!find.length) {
+                throw new ErrorHandler(errorCodesEnum.NOT_FOUND, errorMessages.NOT_EXIST_USER_WITH_SUCH_ID);
             }
+
             next();
         } catch (e) {
-            res.status(errorCodesEnum.NOT_FOUND).json(e.message);
+            next(e);
         }
     }
-
 };

@@ -6,10 +6,10 @@ module.exports = {
      */
     findUsers: () => User.find(),
     /**
-     * @param userID
+     * @param userId
      * @returns {Query<Document | null, Document>}
      */
-    findUserById: (userID) => User.findById(userID),
+    findUserById: (userId) => User.findById(userId),
     /**
      * @param choseEmail
      * @returns {Query<Array<Document>, Document>}

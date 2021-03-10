@@ -1,7 +1,6 @@
-const errorMessages = require('../error/error.messages');
+const { errorCodesEnum, errorMessages, ErrorHandler } = require('../error');
 const { carValidators } = require('../validators');
 const { Car } = require('../dataBase/models');
-const { errorCodesEnum } = require('../constant');
 
 module.exports = {
     checkIsCarValid: (req, res, next) => {
@@ -9,36 +8,37 @@ module.exports = {
             const { error } = carValidators.createCarValidator.validate(req.body);
 
             if (error) {
-                throw new Error(error.details[0].message);
+                throw new ErrorHandler(errorCodesEnum.BAD_REQUEST, errorMessages.BED_REQUEST, error.details[0].message);
             }
             next();
         } catch (e) {
-            res.status(errorCodesEnum.BAD_REQUEST).json(e.message);
+            next(e);
         }
     },
     checkIsModelExist: (req, res, next) => {
         try {
             const choseModel = req.body.model;
-            const { language = 'en' } = req.body;
+            const find = Car.find({ model: choseModel });
 
-            if (!Car.find({ model: choseModel })) {
-                throw new Error(errorMessages.NOT_EXIST_CAR_WITH_SUCH_MODEL[language]);
+            if (!find.length) {
+                throw new ErrorHandler(errorCodesEnum.NOT_FOUND, errorMessages.NOT_EXIST_CAR_WITH_SUCH_MODEL);
             }
             next();
         } catch (e) {
-            res.status(errorCodesEnum.NOT_FOUND).json(e.message);
+            next(e);
         }
     },
     checkIsCarIdExist: (req, res, next) => {
         try {
-            const { carId, language = 'en' } = req.body;
+            const { carId } = req.body;
+            const find = Car.find({ _id: carId });
 
-            if (!Car.find({ _id: carId })) {
-                throw new Error(errorMessages.NOT_EXIST_CAR_WITH_SUCH_ID[language]);
+            if (!find.length) {
+                throw new ErrorHandler(errorCodesEnum.NOT_FOUND, errorMessages.NOT_EXIST_CAR_WITH_SUCH_ID);
             }
             next();
         } catch (e) {
-            res.status(errorCodesEnum.NOT_FOUND).json(e.message);
+            next(e);
         }
     }
 
