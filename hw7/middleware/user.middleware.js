@@ -39,6 +39,8 @@ module.exports = {
                 throw new ErrorHandler(errorCodesEnum.NOT_FOUND, errorMessages.NOT_EXIST_USER_WITH_SUCH_ID);
             }
 
+            req.infoEmail = find[0].email;
+            req.infoName = find[0].name;
             next();
         } catch (e) {
             next(e);

@@ -1,6 +1,6 @@
 const { constants, emailActionsEnum, statusCodeEnum } = require('../constant');
 const { mailService, userService } = require('../service');
-const { O_Auth, User } = require('../dataBase/models');
+const { O_Auth } = require('../dataBase/models');
 const { passwordHasher } = require('../helpers');
 
 module.exports = {
@@ -58,12 +58,13 @@ module.exports = {
         try {
             const { userId } = req.params;
             const id = req.infoTokens;
-            const user = await User.findById(userId);
+            const email = req.infoEmail;
+            const name = req.infoName;
 
             await userService.deleteUserById(userId);
             await O_Auth.findByIdAndDelete({ _id: id });
 
-            await mailService.sendMail(user.email, emailActionsEnum.USER_DELETED, { userName: user.name });
+            await mailService.sendMail(email, emailActionsEnum.USER_DELETED, { userName: name });
 
             res.status(statusCodeEnum.OK).json(constants.USER_IS_DELETED);
         } catch (e) {
