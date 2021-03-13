@@ -7,10 +7,6 @@ module.exports = (uploadFileName, fileType, itemId) => {
     const fileExtension = uploadFileName.split('.').pop();
     const fileName = `${uuid()}.${fileExtension}`;
     const filePath = path.join(fileDir, fileName);
-    console.log('*****************');
-    console.log(filePath);
-    console.log('*****************');
-
     const uploadPath = path.join(pathWithoutStatic, fileName);
 
     return { filePath, fileDir, uploadPath };

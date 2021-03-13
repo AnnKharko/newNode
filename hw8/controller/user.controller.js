@@ -49,21 +49,21 @@ module.exports = {
             const user = await userService.createNewUser({ ...req.body, password: hasPassword });
 
             if (avatar) {
-                await uploadService.photoDirBuild(avatar, user._id);
-                // await uploadService.uploadDirBuilder(avatar, user._id, 'photo');
+                // await uploadService.photoDirBuild(avatar, user._id);
+                await uploadService.userUploadDirBuilder(avatar, user._id, 'photo');
             }
 
             if (docs) {
                 for (const doc of docs) {
                     // eslint-disable-next-line no-await-in-loop
-                    await uploadService.docDirBuild(doc, user._id);
+                    await uploadService.userUploadDirBuilder(doc, user._id, 'doc');
                 }
             }
 
             if (videos) {
                 for (const video of videos) {
                     // eslint-disable-next-line no-await-in-loop
-                    await uploadService.videoDirBuild(video, user._id);
+                    await uploadService.userUploadDirBuilder(video, user._id, 'video');
                 }
             }
             await mailService.sendMail(email, emailActionsEnum.WELCOME, { userName: name });

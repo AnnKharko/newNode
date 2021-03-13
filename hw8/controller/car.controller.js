@@ -38,21 +38,28 @@ module.exports = {
 
     createCar: async (req, res, next) => {
         try {
-            const { photos, docs } = req;
+            const { photos, docs, videos } = req;
 
             const car = await carService.createNewCar(req.body);
 
             if (photos) {
                 for (const photo of photos) {
                     // eslint-disable-next-line no-await-in-loop
-                    await uploadService.photoDirBuildCar(photo, car._id);
+                    await uploadService.carUploadDirBuilder(photo, car._id, 'photo');
                 }
             }
 
             if (docs) {
                 for (const doc of docs) {
                     // eslint-disable-next-line no-await-in-loop
-                    await uploadService.docDirBuildCar(doc, car._id);
+                    await uploadService.carUploadDirBuilder(doc, car._id, 'doc');
+                }
+            }
+
+            if (videos) {
+                for (const video of videos) {
+                    // eslint-disable-next-line no-await-in-loop
+                    await uploadService.carUploadDirBuilder(video, car._id, 'video');
                 }
             }
 

@@ -15,6 +15,7 @@ const app = express();
 
 // eslint-disable-next-line no-use-before-define
 _connectDB();
+
 app.use(fileUpload());
 app.use(express.static(path.join(process.cwd(), 'static')));
 app.use(express.json());
@@ -34,7 +35,7 @@ app.use('*', (err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-    console.log('App listen 5000');
+    console.log(`App listen ${PORT}`);
 });
 
 function _connectDB() {
