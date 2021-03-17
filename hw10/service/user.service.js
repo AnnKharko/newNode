@@ -1,11 +1,8 @@
 const { queryBuilder } = require('../helpers');
-const { User } = require('../dataBase/models');
+// const { User } = require('../dataBase/models');
+const db = require('../dataBase/MySQL').getInstance();
 
 module.exports = {
-    /**
-     * @param query
-     * @returns {Promise<{pages: number, data: *, limit: (number|*), count: *, page: (number|*)}>}
-     */
     findUsers: async (query = {}) => {
         // ?&ageGte=18&ageLte=35&gender=female&isMarried=false
         const {
@@ -17,10 +14,10 @@ module.exports = {
             switch (key) {
                 // age: {$gte: 18, $lte: 35}
                 case 'ageGte':
-                    filterObject.age = Object.assign({}, filterObject.age, { $gte: +filters.ageGte });
+                    filterObject.age = { ...filterObject.age, $gte: +filters.ageGte };
                     break;
                 case 'ageLte':
-                    filterObject.age = Object.assign({}, filterObject.age, { $lte: +filters.ageLte });
+                    filterObject.age = { ...filterObject.age, $lte: +filters.ageLte };
                     break;
                 case 'name':
                     filterObject.name = { $regex: filters.name, $options: 'i' };
@@ -29,40 +26,40 @@ module.exports = {
                     filterObject[key] = filters[key];
             }
         });
+        const User = db.getModel('User');
+        const users = await User.findAll();
 
-        const users = await User.find(filterObject).limit(+limit).skip(skip).sort(sort);
-        const count = await User.countDocuments(filterObject);
+        // const users = await User.find(filterObject).limit(+limit).skip(skip).sort(sort);
+        // const count = await User.countDocuments(filterObject);
 
         return {
             data: users,
             page,
             limit,
-            count,
-            pages: Math.ceil(count / limit)
         };
     },
-    /**
-     * @param userId
-     * @returns {Query<Document | null, Document>}
-     */
-    findUserById: (userId) => User.findById(userId),
-    /**
-     * @param choseEmail
-     * @returns {Query<Array<Document>, Document>}
-     */
-    findUserByEmail(choseEmail) {
-        return User.find({ email: choseEmail });
+    findUserById: (userId) => {
+        const User = db.getModel('User');
+        return User.findAll({
+            where: { id: userId }
+        });
     },
-    // eslint-disable-next-line no-undef
-    /**
-     * @param userObjectnode
-     * @returns {Promise<Document>}
-     */
-    createNewUser: (userObject) => User.create(userObject),
-    /**
-     * @param userId
-     * @returns {Query<Document | null, Document>}
-     */
-    deleteUserById: (userId) => User.findByIdAndDelete(userId)
+    findUserByEmail(choseEmail) {
+        const User = db.getModel('User');
+        return User.findAll({
+            where: { email: choseEmail }
+        });
+    },
+    createNewUser: (userObject) => {
+        const User = db.getModel('User');
+        return User.create(userObject);
+    },
+    deleteUserById: (userId) => {
+        const User = db.getModel('User');
+        User.destroy({
+            where: { id: userId }
+        });
+    }
+        // User.findByIdAndDelete(userId)
     // updateUserById: (userId, updateObject) => User.updateOne({ _id: userId }, { $set: updateObject })
 };

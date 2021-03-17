@@ -2,11 +2,12 @@ const jwt = require('jsonwebtoken');
 const { errorCodesEnum, errorMessages, ErrorHandler } = require('../error');
 const { constants } = require('../constant');
 const { JWT_SECRET, JWT_REFRESH_SECRET } = require('../configs/config');
-const { O_Auth } = require('../dataBase/models');
+const db = require('../dataBase/MySQL').getInstance();
 
 module.exports = {
     checkAccessToken: async (req, res, next) => {
         try {
+            const O_Auth = db.getModel('O_Auth');
             const access_token = req.get(constants.AUTHORIZATION);
 
             if (!access_token) {
@@ -20,13 +21,16 @@ module.exports = {
             });
 
             // ===== CHECK DATA BASE
-            const tokens = await O_Auth.findOne({ access_token }).populate('user');
+            // const tokens = await O_Auth.findOne({ access_token }).populate('user');
+            const tokens = await O_Auth.findAll({
+                where: { access_token }
+            });
 
             if (!tokens) {
                 throw new ErrorHandler(errorCodesEnum.BAD_REQUEST, errorMessages.NOT_VALID_TOKEN);
             }
 
-            req.infoTokens = tokens._id;
+            req.infoTokens = tokens[0].dataValues.id;
             next();
         } catch (e) {
             next(e);
@@ -34,6 +38,7 @@ module.exports = {
     },
     checkRefreshToken: async (req, res, next) => {
         try {
+            const O_Auth = db.getModel('O_Auth');
             const refresh_token = req.get(constants.AUTHORIZATION);
 
             if (!refresh_token) {
@@ -47,13 +52,17 @@ module.exports = {
             });
 
             // ===== CHECK DATA BASE
-            const tokens = await O_Auth.findOne({ refresh_token });
+            // const tokens = await O_Auth.findOne({ refresh_token });
+            const tokens = await O_Auth.findAll({
+                where: { refresh_token }
+            });
 
             if (!tokens) {
                 throw new ErrorHandler(errorCodesEnum.BAD_REQUEST, errorMessages.NOT_VALID_REFRESH_TOKEN);
             }
 
-            req.tokenInfo = tokens;
+            // req.tokenInfo = tokens;
+            req.tokenInfo = tokens[0].dataValues;
             next();
         } catch (e) {
             next(e);

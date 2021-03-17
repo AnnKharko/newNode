@@ -1,6 +1,6 @@
 const { errorCodesEnum, ErrorHandler, errorMessages } = require('../error');
 const { userValidators } = require('../validators');
-const { User } = require('../dataBase/models');
+const db = require('../dataBase/MySQL').getInstance();
 
 module.exports = {
     checkIsUserValid: (req, res, next) => {
@@ -18,7 +18,11 @@ module.exports = {
     checkIsEmailExist: async (req, res, next) => {
         try {
             const choseEmail = req.params.email;
-            const findEmail = await User.find({ email: choseEmail });
+            const User = db.getModel('User');
+
+            const findEmail = await User.findAll({
+                where: { email: choseEmail }
+            });
 
             if (!findEmail.length) {
                 throw new ErrorHandler(errorCodesEnum.NOT_FOUND, errorMessages.NOT_EXIST_USER_WITH_SUCH_EMAIL);
@@ -31,9 +35,12 @@ module.exports = {
     },
     checkIsUserIdExist: async (req, res, next) => {
         try {
-            const id = req.params.userId;
+            const User = db.getModel('User');
+            const { userId } = req.params;
 
-            const find = await User.find({ _id: id });
+            const find = await User.findAll({
+                where: { id: userId }
+            });
 
             if (!find.length) {
                 throw new ErrorHandler(errorCodesEnum.NOT_FOUND, errorMessages.NOT_EXIST_USER_WITH_SUCH_ID);

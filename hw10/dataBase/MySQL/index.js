@@ -15,6 +15,7 @@
 const Sequelize = require('sequelize');
 const fs = require('fs');
 const path = require('path');
+// const { ROOT_USER, ROOT_USER_PASSWORD } = require('../../configs/config');
 
 module.exports = (() => {
     let instance;

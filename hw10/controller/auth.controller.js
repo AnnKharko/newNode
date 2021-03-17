@@ -14,8 +14,8 @@ module.exports = {
     },
     refreshToken: async (req, res, next) => {
         try {
-            const { user, _id } = req.tokenInfo;
-            const tokens = await authService.refreshToken(user, _id);
+            const { user, id } = req.tokenInfo;
+            const tokens = await authService.refreshToken(user, id);
 
             res.json(tokens);
         } catch (e) {

@@ -1,6 +1,6 @@
 const { errorCodesEnum, errorMessages, ErrorHandler } = require('../error');
 const { carValidators } = require('../validators');
-const { Car } = require('../dataBase/models');
+const db = require('../dataBase/MySQL').getInstance();
 
 module.exports = {
     checkIsCarValid: (req, res, next) => {
@@ -18,7 +18,8 @@ module.exports = {
     checkIsModelExist: (req, res, next) => {
         try {
             const choseModel = req.body.model;
-            const find = Car.find({ model: choseModel });
+            const Car = db.getModel('Car');
+            const find = Car.findAll({ where: { model: choseModel } });
 
             if (!find.length) {
                 throw new ErrorHandler(errorCodesEnum.NOT_FOUND, errorMessages.NOT_EXIST_CAR_WITH_SUCH_MODEL);
@@ -30,8 +31,10 @@ module.exports = {
     },
     checkIsCarIdExist: (req, res, next) => {
         try {
+            const Car = db.getModel('Car');
             const { carId } = req.body;
-            const find = Car.find({ _id: carId });
+
+            const find = Car.findAll({ where: { id: carId } });
 
             if (!find.length) {
                 throw new ErrorHandler(errorCodesEnum.NOT_FOUND, errorMessages.NOT_EXIST_CAR_WITH_SUCH_ID);

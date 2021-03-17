@@ -27,6 +27,7 @@ module.exports = {
     getCar: async (req, res, next) => {
         try {
             const { carId } = req.params;
+            console.log(carId);
 
             const car = await carService.findCarById(carId);
 
