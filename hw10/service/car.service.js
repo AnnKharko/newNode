@@ -1,11 +1,11 @@
-// const { Car } = require('../dataBase/models');
-const { queryBuilder } = require('../helpers');
 const db = require('../dataBase/MySQL').getInstance();
+const { queryBuilder } = require('../helpers');
 
 module.exports = {
     findCars: async (query = {}) => {
         const Car = db.getModel('Car');
 
+        // queryBuilder ще не реалізовано
         // ?yearGte=2014&yearLte=2021&priceGte=20000&priceLte=50000&color=red
         const {
             filters, keys, limit, page
@@ -31,7 +31,7 @@ module.exports = {
             }
         });
 
-        // const cars = await Car.find(filterObject).limit(+limit).skip(skip).sort(sort);
+        // const cars = await Car.findAll(filterObject).limit(+limit).skip(skip).sort(sort);
         const cars = await Car.findAll();
 
         return {
@@ -40,7 +40,6 @@ module.exports = {
             limit,
         };
     },
-    // ще недороблено
     findCarById: async (carID) => {
         const Car = db.getModel('Car');
 
@@ -49,21 +48,19 @@ module.exports = {
         });
         return car;
     },
-    findCarByModel(choseModel) {
-        // return Car.find({ model: choseModel });
+    findCarByModel: (choseModel) => {
         const Car = db.getModel('Car');
         return Car.findAll({
             where: { model: choseModel }
         });
     },
-    // eslint-disable-next-line no-undef
     createNewCar: (carObject) => {
         const Car = db.getModel('Car');
         return Car.create(carObject);
     },
     deleteCarById: (carId) => {
         const Car = db.getModel('Car');
-        return Car.destroy({
+        Car.destroy({
             where: { id: carId }
         });
     }

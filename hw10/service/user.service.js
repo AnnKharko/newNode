@@ -1,12 +1,12 @@
-const { queryBuilder } = require('../helpers');
-// const { User } = require('../dataBase/models');
 const db = require('../dataBase/MySQL').getInstance();
+const { queryBuilder } = require('../helpers');
 
 module.exports = {
     findUsers: async (query = {}) => {
+        // queryBuilder ще не реалізовано
         // ?&ageGte=18&ageLte=35&gender=female&isMarried=false
         const {
-            filters, keys, limit, page, skip, sort
+            filters, keys, limit, page
         } = queryBuilder(query);
         const filterObject = {};
 
@@ -29,7 +29,7 @@ module.exports = {
         const User = db.getModel('User');
         const users = await User.findAll();
 
-        // const users = await User.find(filterObject).limit(+limit).skip(skip).sort(sort);
+        // const users = await User.findAll(filterObject).limit(+limit).skip(skip).sort(sort);
         // const count = await User.countDocuments(filterObject);
 
         return {
@@ -60,6 +60,4 @@ module.exports = {
             where: { id: userId }
         });
     }
-        // User.findByIdAndDelete(userId)
-    // updateUserById: (userId, updateObject) => User.updateOne({ _id: userId }, { $set: updateObject })
 };

@@ -5,7 +5,7 @@ const { carMiddleware, fileMiddleware } = require('../middleware');
 
 router.get('/', carController.getAllCars);
 
-router.get('find/:model', carMiddleware.checkIsModelExist, carController.getCarByModel);
+router.get('/find/:model', carMiddleware.checkIsModelExist, carController.getCarByModel);
 
 router.get('/:carId', carMiddleware.checkIsCarIdExist, carController.getCar);
 

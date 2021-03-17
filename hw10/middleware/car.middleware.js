@@ -15,11 +15,12 @@ module.exports = {
             next(e);
         }
     },
-    checkIsModelExist: (req, res, next) => {
+    checkIsModelExist: async (req, res, next) => {
         try {
-            const choseModel = req.body.model;
+            const choseModel = req.params.model;
+
             const Car = db.getModel('Car');
-            const find = Car.findAll({ where: { model: choseModel } });
+            const find = await Car.findAll({ where: { model: choseModel } });
 
             if (!find.length) {
                 throw new ErrorHandler(errorCodesEnum.NOT_FOUND, errorMessages.NOT_EXIST_CAR_WITH_SUCH_MODEL);
@@ -29,12 +30,12 @@ module.exports = {
             next(e);
         }
     },
-    checkIsCarIdExist: (req, res, next) => {
+    checkIsCarIdExist: async (req, res, next) => {
         try {
             const Car = db.getModel('Car');
-            const { carId } = req.body;
+            const { carId } = req.params;
 
-            const find = Car.findAll({ where: { id: carId } });
+            const find = await Car.findAll({ where: { id: carId } });
 
             if (!find.length) {
                 throw new ErrorHandler(errorCodesEnum.NOT_FOUND, errorMessages.NOT_EXIST_CAR_WITH_SUCH_ID);

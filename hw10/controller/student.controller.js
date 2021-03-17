@@ -1,6 +1,6 @@
 //  mysql2 - низькорівнева імплементація звязку бази і node
 
-const { studentService } = require('../service/MySQL');
+const { studentService } = require('../service');
 
 module.exports = {
     getAll: async (req, res, next) => {
@@ -8,6 +8,15 @@ module.exports = {
             const students = await studentService.findAll();
 
             res.json(students);
+        } catch (e) {
+            next(e);
+        }
+    },
+    getStudent: async (req, res, next) => {
+        try {
+            const student = await studentService.findOne(req.params.id);
+
+            res.json(student);
         } catch (e) {
             next(e);
         }
@@ -20,6 +29,16 @@ module.exports = {
         } catch (e) {
             next(e);
         }
+    },
+    deleteStudent: async (req, res, next) => {
+        try {
+            const { id } = req.params;
+
+            await studentService.deleteOne(id);
+
+            res.json('OK');
+        } catch (e) {
+            next(e);
+        }
     }
 };
-// ====================================

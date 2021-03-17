@@ -8,5 +8,5 @@ module.exports = {
     ROOT_EMAIL_PASSWORD: process.env.ROOT_EMAIL_PASSWORD || '234hhhh567890ptrewq',
 
     ROOT_USER: process.env.ROOT_USER || 'root',
-    ROOT_USER_PASSWORD: process.env.ROOT_USER_PASSWORD || 'javascript'
+    ROOT_USER_PASSWORD: process.env.ROOT_USER_PASSWORD || 'root'
 };

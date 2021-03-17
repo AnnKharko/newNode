@@ -15,7 +15,7 @@
 //     }
 // };
 // =============================================
-const db = require('../../dataBase/MySQL').getInstance();
+const db = require('../dataBase/MySQL').getInstance();
 
 module.exports = {
     findAll: () => {
@@ -23,9 +23,18 @@ module.exports = {
 
         return Student.findAll();
     },
+    findOne: (id) => {
+        const Student = db.getModel('Student');
+
+        return Student.findAll({ where: { id } });
+    },
     createOne: (studentObject) => {
         const Student = db.getModel('Student');
 
         return Student.create(studentObject);
+    },
+    deleteOne: (id) => {
+        const Student = db.getModel('Student');
+        return Student.destroy({ where: { id } });
     }
 };
