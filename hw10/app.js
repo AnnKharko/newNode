@@ -5,8 +5,11 @@ const path = require('path');
 
 // require('dotenv').config();
 const dotenv = require('dotenv');
+const db = require('./dataBase/MySQL').getInstance();
 
 dotenv.config({ path: path.join(process.cwd(), '../.env') });
+
+db.setModels();
 
 const { MONGO_URL, PORT } = require('./configs/config');
 const apiRouter = require('./router/api.router');

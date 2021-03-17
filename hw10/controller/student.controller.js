@@ -1,3 +1,5 @@
+//  mysql2 - низькорівнева імплементація звязку бази і node
+
 const { studentService } = require('../service/MySQL');
 
 module.exports = {
@@ -20,3 +22,4 @@ module.exports = {
         }
     }
 };
+// ====================================
