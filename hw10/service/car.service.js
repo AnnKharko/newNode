@@ -1,15 +1,14 @@
-const { Car } = require('../dataBase/models');
+const db = require('../dataBase/MySQL').getInstance();
 const { queryBuilder } = require('../helpers');
 
 module.exports = {
-    /**
-     * @param query
-     * @returns {Promise<{pages: number, data: *, limit: (number|*), count: *, page: (number|*)}>}
-     */
     findCars: async (query = {}) => {
+        const Car = db.getModel('Car');
+
+        // queryBuilder ще не реалізовано
         // ?yearGte=2014&yearLte=2021&priceGte=20000&priceLte=50000&color=red
         const {
-            filters, keys, limit, page, skip, sort
+            filters, keys, limit, page
         } = queryBuilder(query);
         const filterObject = {};
 
@@ -32,38 +31,37 @@ module.exports = {
             }
         });
 
-        const cars = await Car.find(filterObject).limit(+limit).skip(skip).sort(sort);
-        const count = await Car.countDocuments(filterObject);
+        // const cars = await Car.findAll(filterObject).limit(+limit).skip(skip).sort(sort);
+        const cars = await Car.findAll();
 
         return {
             data: cars,
             page,
             limit,
-            count,
-            pages: Math.ceil(count / limit)
         };
     },
-    /**
-     * @param carID
-     * @returns {Query<Document | null, Document>}
-     */
-    findCarById: (carID) => Car.findById(carID),
-    /**
-     * @param choseModel
-     * @returns {Query<Array<Document>, Document>}
-     */
-    findCarByModel(choseModel) {
-        return Car.find({ model: choseModel });
+    findCarById: async (carID) => {
+        const Car = db.getModel('Car');
+
+        const car = await Car.findAll({
+            where: { id: carID }
+        });
+        return car;
     },
-    // eslint-disable-next-line no-undef
-    /**
-     * @param carObject
-     * @returns {Promise<Document>}
-     */
-    createNewCar: (carObject) => Car.create(carObject),
-    /**
-     * @param carId
-     * @returns {Query<Document | null, Document>}
-     */
-    deleteCarById: (carId) => Car.findByIdAndDelete(carId)
+    findCarByModel: (choseModel) => {
+        const Car = db.getModel('Car');
+        return Car.findAll({
+            where: { model: choseModel }
+        });
+    },
+    createNewCar: (carObject) => {
+        const Car = db.getModel('Car');
+        return Car.create(carObject);
+    },
+    deleteCarById: (carId) => {
+        const Car = db.getModel('Car');
+        Car.destroy({
+            where: { id: carId }
+        });
+    }
 };

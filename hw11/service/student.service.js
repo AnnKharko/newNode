@@ -15,7 +15,7 @@
 //     }
 // };
 // =============================================
-const db = require('../../dataBase/MySQL').getInstance();
+const db = require('../dataBase/MySQL').getInstance();
 
 module.exports = {
     findAll: () => {
@@ -23,9 +23,27 @@ module.exports = {
 
         return Student.findAll();
     },
-    createOne: (studentObject) => {
+    findOne: (id) => {
         const Student = db.getModel('Student');
 
-        return Student.create(studentObject);
+        return Student.findAll({ where: { id } });
+    },
+    createOne: (studentObject, transaction) => {
+        const Student = db.getModel('Student');
+
+        return Student.create(studentObject, { transaction });
+    },
+    // updateStudent: (id, student, transaction) => {
+    //     const Student = db.getModel('Student');
+    //
+    //     return Student.update(student, {
+    //         where: { id },
+    //         returning: true,
+    //         transaction
+    //     });
+    // },
+    deleteOne: (id, transaction) => {
+        const Student = db.getModel('Student');
+        return Student.destroy({ where: { id }, transaction });
     }
 };

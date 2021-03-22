@@ -1,7 +1,7 @@
 const { constants, emailActionsEnum, statusCodeEnum } = require('../constant');
 const { mailService, uploadService, userService } = require('../service');
-const { O_Auth } = require('../dataBase/models');
 const { passwordHasher } = require('../helpers');
+const db = require('../dataBase/MySQL').getInstance();
 
 module.exports = {
     getAllUsers: async (req, res, next) => {
@@ -76,13 +76,16 @@ module.exports = {
 
     deleteUser: async (req, res, next) => {
         try {
+            const O_Auth = db.getModel('O_Auth');
             const { userId } = req.params;
             const id = req.infoTokens;
             const email = req.infoEmail;
             const name = req.infoName;
 
             await userService.deleteUserById(userId);
-            await O_Auth.findByIdAndDelete({ _id: id });
+            await O_Auth.destroy({
+                where: { id }
+            });
 
             await mailService.sendMail(email, emailActionsEnum.USER_DELETED, { userName: name });
 

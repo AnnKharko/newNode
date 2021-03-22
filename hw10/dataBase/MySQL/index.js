@@ -15,12 +15,13 @@
 const Sequelize = require('sequelize');
 const fs = require('fs');
 const path = require('path');
+const { ROOT_USER, ROOT_USER_PASSWORD } = require('../../configs/config');
 
 module.exports = (() => {
     let instance;
 
     const initConnection = () => {
-        const client = new Sequelize('sep-2020', 'root', 'javascript', { dialect: 'mysql' });
+        const client = new Sequelize('sep-2020', ROOT_USER, ROOT_USER_PASSWORD, { dialect: 'mysql' });
 
         const models = {};
         const modelsPath = path.join(process.cwd(), 'dataBase', 'MySQL', 'models');
