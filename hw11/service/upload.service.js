@@ -1,3 +1,4 @@
+// ще не перероблено для MySQL
 const fs = require('fs/promises');
 const { constants } = require('../constant');
 const { fileDirBuilder, carFileDirBuilder } = require('../helpers');

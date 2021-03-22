@@ -1,5 +1,6 @@
 const { carService, uploadService } = require('../service');
 const { constants, statusCodeEnum } = require('../constant');
+const { transactionInstance } = require('../dataBase/MySQL').getInstance();
 
 module.exports = {
     getAllCars: async (req, res, next) => {
@@ -37,10 +38,11 @@ module.exports = {
     },
 
     createCar: async (req, res, next) => {
+        const transaction = await transactionInstance();
         try {
             const { photos, docs, videos } = req;
 
-            const car = await carService.createNewCar(req.body);
+            const car = await carService.createNewCar(req.body, transaction);
 
             if (photos) {
                 for (const photo of photos) {
@@ -62,21 +64,27 @@ module.exports = {
                     await uploadService.carUploadDirBuilder(video, car._id, 'video');
                 }
             }
+            await transaction.commit();
 
             res.status(statusCodeEnum.CREATED).json(constants.CAR_IS_CREATED);
         } catch (e) {
+            await transaction.rollback();
             next(e);
         }
     },
 
     deleteCar: async (req, res, next) => {
+        const transaction = await transactionInstance();
+
         try {
             const { carId } = req.params;
 
-            await carService.deleteCarById(carId);
+            await carService.deleteCarById(carId, transaction);
 
+            await transaction.commit();
             res.status(statusCodeEnum.OK).json(constants.CAR_IS_DELETED);
         } catch (e) {
+            await transaction.rollback();
             next(e);
         }
     }

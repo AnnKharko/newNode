@@ -1,6 +1,7 @@
 //  mysql2 - низькорівнева імплементація звязку бази і node
 
 const { studentService } = require('../service');
+const { transactionInstance } = require('../dataBase/MySQL').getInstance();
 
 module.exports = {
     getAll: async (req, res, next) => {
@@ -22,22 +23,30 @@ module.exports = {
         }
     },
     createStudent: async (req, res, next) => {
+        const transaction = await transactionInstance();
         try {
-            await studentService.createOne(req.body);
+            await studentService.createOne(req.body, transaction);
+            // await studentService.updateStudent(16, { name: 'Ivan' }, transaction);
 
+            await transaction.commit();
             res.json('OK!');
         } catch (e) {
+            await transaction.rollback();
             next(e);
         }
     },
     deleteStudent: async (req, res, next) => {
+        const transaction = await transactionInstance();
+
         try {
             const { id } = req.params;
 
-            await studentService.deleteOne(id);
+            await studentService.deleteOne(id, transaction);
 
+            await transaction.commit();
             res.json('OK');
         } catch (e) {
+            await transaction.rollback();
             next(e);
         }
     }

@@ -41,23 +41,30 @@ module.exports = {
     findUserById: (userId) => {
         const User = db.getModel('User');
         return User.findAll({
-            where: { id: userId }
+            where: { id: userId },
+            attributes: {
+                exclude: ['password']
+            }
         });
     },
     findUserByEmail(choseEmail) {
         const User = db.getModel('User');
         return User.findAll({
-            where: { email: choseEmail }
+            where: { email: choseEmail },
+            attributes: {
+                exclude: ['password']
+            }
         });
     },
-    createNewUser: (userObject) => {
+    createNewUser: (userObject, transaction) => {
         const User = db.getModel('User');
-        return User.create(userObject);
+        return User.create(userObject, transaction);
     },
-    deleteUserById: (userId) => {
+    deleteUserById: (userId, transaction) => {
         const User = db.getModel('User');
         User.destroy({
-            where: { id: userId }
+            where: { id: userId },
+            transaction
         });
     }
 };

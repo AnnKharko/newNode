@@ -1,7 +1,7 @@
 const { passwordHasher, tokenizer } = require('../helpers');
 const db = require('../dataBase/MySQL').getInstance();
 
-const authUser = async (userEmail, password) => {
+const authUser = async (userEmail, password, transaction) => {
     const User = db.getModel('User');
     const O_Auth = db.getModel('O_Auth');
 
@@ -16,16 +16,18 @@ const authUser = async (userEmail, password) => {
     await passwordHasher.compare(password, user[0].dataValues.password);
     const tokens = tokenizer();
     // ==== SAVE TOKENS TO DB
-    await O_Auth.create({ ...tokens, user: user[0].dataValues.id });
+    await O_Auth.create({ ...tokens, user: user[0].dataValues.id }, transaction);
+
     return tokens;
 };
 
-const refreshToken = async (user, tokenId) => {
+const refreshToken = async (user, tokenId, transaction) => {
     const O_Auth = db.getModel('O_Auth');
     const tokens = tokenizer();
 
     await O_Auth.update({ ...tokens, user }, {
-        where: { id: tokenId }
+        where: { id: tokenId },
+        transaction
     });
 
     return tokens;

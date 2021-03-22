@@ -28,13 +28,22 @@ module.exports = {
 
         return Student.findAll({ where: { id } });
     },
-    createOne: (studentObject) => {
+    createOne: (studentObject, transaction) => {
         const Student = db.getModel('Student');
 
-        return Student.create(studentObject);
+        return Student.create(studentObject, { transaction });
     },
-    deleteOne: (id) => {
+    // updateStudent: (id, student, transaction) => {
+    //     const Student = db.getModel('Student');
+    //
+    //     return Student.update(student, {
+    //         where: { id },
+    //         returning: true,
+    //         transaction
+    //     });
+    // },
+    deleteOne: (id, transaction) => {
         const Student = db.getModel('Student');
-        return Student.destroy({ where: { id } });
+        return Student.destroy({ where: { id }, transaction });
     }
 };

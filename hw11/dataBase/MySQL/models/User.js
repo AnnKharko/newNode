@@ -28,7 +28,7 @@ module.exports = (client) => {
             password: {
                 type: DataTypes.STRING,
                 require: true,
-                select: false
+                // exclude: true
             },
             avatar: {
                 type: DataTypes.STRING,
@@ -39,7 +39,10 @@ module.exports = (client) => {
         },
         {
             tableName: 'users',
-            timestamps: false
+            timestamps: false,
+            defaultScope: {
+                attributes: { exclude: ['password'] }
+            }
         }
     );
     return User;

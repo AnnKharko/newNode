@@ -54,14 +54,15 @@ module.exports = {
             where: { model: choseModel }
         });
     },
-    createNewCar: (carObject) => {
+    createNewCar: (carObject, transaction) => {
         const Car = db.getModel('Car');
-        return Car.create(carObject);
+        return Car.create(carObject, transaction);
     },
-    deleteCarById: (carId) => {
+    deleteCarById: (carId, transaction) => {
         const Car = db.getModel('Car');
-        Car.destroy({
-            where: { id: carId }
+        return Car.destroy({
+            where: { id: carId },
+            transaction
         });
     }
 };

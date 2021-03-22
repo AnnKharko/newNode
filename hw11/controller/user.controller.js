@@ -1,6 +1,7 @@
 const { constants, emailActionsEnum, statusCodeEnum } = require('../constant');
 const { mailService, uploadService, userService } = require('../service');
 const { passwordHasher } = require('../helpers');
+const { transactionInstance } = require('../dataBase/MySQL').getInstance();
 const db = require('../dataBase/MySQL').getInstance();
 
 module.exports = {
@@ -39,6 +40,8 @@ module.exports = {
     },
 
     createUser: async (req, res, next) => {
+        const transaction = await transactionInstance();
+
         try {
             const {
                 body: { password, email, name }, avatar, docs, videos
@@ -46,7 +49,7 @@ module.exports = {
 
             const hasPassword = await passwordHasher.hash(password);
 
-            const user = await userService.createNewUser({ ...req.body, password: hasPassword });
+            const user = await userService.createNewUser({ ...req.body, password: hasPassword }, transaction);
 
             if (avatar) {
                 // await uploadService.photoDirBuild(avatar, user._id);
@@ -68,13 +71,17 @@ module.exports = {
             }
             await mailService.sendMail(email, emailActionsEnum.WELCOME, { userName: name });
 
+            await transaction.commit();
             res.status(statusCodeEnum.CREATED).json(constants.USER_IS_CREATED);
         } catch (e) {
+            await transaction.rollback();
             next(e);
         }
     },
 
     deleteUser: async (req, res, next) => {
+        const transaction = await transactionInstance();
+
         try {
             const O_Auth = db.getModel('O_Auth');
             const { userId } = req.params;
@@ -82,15 +89,17 @@ module.exports = {
             const email = req.infoEmail;
             const name = req.infoName;
 
-            await userService.deleteUserById(userId);
+            await userService.deleteUserById(userId, transaction);
             await O_Auth.destroy({
                 where: { id }
             });
 
             await mailService.sendMail(email, emailActionsEnum.USER_DELETED, { userName: name });
+            await transaction.commit();
 
             res.status(statusCodeEnum.OK).json(constants.USER_IS_DELETED);
         } catch (e) {
+            await transaction.rollback();
             next(e);
         }
     }
