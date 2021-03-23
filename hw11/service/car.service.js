@@ -1,38 +1,45 @@
 const db = require('../dataBase/MySQL').getInstance();
 const { queryBuilder } = require('../helpers');
+// eslint-disable-next-line import/order
+const { Op } = require('sequelize');
 
 module.exports = {
     findCars: async (query = {}) => {
         const Car = db.getModel('Car');
+        const price = [];
+        const year = [];
 
-        // queryBuilder ще не реалізовано
         // ?yearGte=2014&yearLte=2021&priceGte=20000&priceLte=50000&color=red
         const {
-            filters, keys, limit, page
+            filters, keys, limit, page, skip
         } = queryBuilder(query);
         const filterObject = {};
 
         keys.forEach((key) => {
             switch (key) {
-                case 'priceGte':
-                    filterObject.price = Object.assign({}, filterObject.price, { $gte: +filters.priceGte });
+                case 'priceGte': // price: { [Op.between]: [20000, 50000]}
+                    price.push(+filters.priceGte);
+                    filterObject.price = { [Op.between]: price };
                     break;
                 case 'priceLte':
-                    filterObject.price = Object.assign({}, filterObject.price, { $lte: +filters.priceLte });
+                    price.push(+filters.priceLte);
+                    filterObject.price = { [Op.between]: price };
                     break;
                 case 'yearGte':
-                    filterObject.year = Object.assign({}, filterObject.year, { $gte: +filters.yearGte });
+                    year.push(+filters.yearGte);
+                    filterObject.year = { [Op.between]: year };
                     break;
                 case 'yearLte':
-                    filterObject.year = Object.assign({}, filterObject.year, { $lte: +filters.yearLte });
+                    year.push(+filters.yearLte);
+                    filterObject.year = { [Op.between]: year };
                     break;
                 default:
                     filterObject[key] = filters[key];
             }
         });
+        console.log(filterObject);
 
-        // const cars = await Car.findAll(filterObject).limit(+limit).skip(skip).sort(sort);
-        const cars = await Car.findAll();
+        const cars = await Car.findAll({ where: filterObject }, { offset: skip, limit: +limit });
 
         return {
             data: cars,

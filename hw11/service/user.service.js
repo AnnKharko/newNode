@@ -1,23 +1,27 @@
 const db = require('../dataBase/MySQL').getInstance();
+// eslint-disable-next-line import/order
+const { Op } = require('sequelize');
 const { queryBuilder } = require('../helpers');
 
 module.exports = {
     findUsers: async (query = {}) => {
-        // queryBuilder ще не реалізовано
-        // ?&ageGte=18&ageLte=35&gender=female&isMarried=false
+        // ?&ageGte=18&ageLte=25&gender=female
         const {
-            filters, keys, limit, page
+            filters, keys, limit, page, skip
         } = queryBuilder(query);
         const filterObject = {};
+        const age = [];
 
         keys.forEach((key) => {
             switch (key) {
-                // age: {$gte: 18, $lte: 35}
+                //   age: { [Op.between]: [18, 35]}
                 case 'ageGte':
-                    filterObject.age = { ...filterObject.age, $gte: +filters.ageGte };
+                    age.push(+filters.ageGte);
                     break;
                 case 'ageLte':
-                    filterObject.age = { ...filterObject.age, $lte: +filters.ageLte };
+                    age.push(+filters.ageLte);
+                    filterObject.age = { ...filterObject.age, [Op.between]: age };
+
                     break;
                 case 'name':
                     filterObject.name = { $regex: filters.name, $options: 'i' };
@@ -26,11 +30,9 @@ module.exports = {
                     filterObject[key] = filters[key];
             }
         });
-        const User = db.getModel('User');
-        const users = await User.findAll();
 
-        // const users = await User.findAll(filterObject).limit(+limit).skip(skip).sort(sort);
-        // const count = await User.countDocuments(filterObject);
+        const User = db.getModel('User');
+        const users = await User.findAll({ where: filterObject }, { offset: skip, limit: +limit });
 
         return {
             data: users,
