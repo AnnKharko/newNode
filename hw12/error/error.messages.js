@@ -51,6 +51,8 @@ module.exports = {
         message: 'Only one photo is  allowed to be upload'
     },
     // FORBIDDEN
-    FORBIDDEN: 4030,
-    message: 'Access denied'
+    FORBIDDEN: {
+        customCode: 4030,
+        message: 'Access denied'
+    }
 };

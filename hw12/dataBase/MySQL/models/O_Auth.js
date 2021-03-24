@@ -14,9 +14,9 @@ module.exports = (client) => {
         }
     );
 
-    // O_Auth.associate = (models) => {
-    //     O_Auth.belongsTo(models.User, { foreignKey: 'userId' });
-    // };
+    O_Auth.associate = (models) => {
+        O_Auth.belongsTo(models.User, { as: 'user', foreignKey: 'authId' });
+    };
 
     return O_Auth;
 };

@@ -47,8 +47,8 @@ module.exports = (client) => {
         }
     );
 
-    // User.associate = (models) => {
-    //     User.hasOne(models.O_Auth, { foreignKey: 'userId' });
-    // };
+    User.associate = (models) => {
+        User.hasOne(models.O_Auth, { as: 'o_auth', foreignKey: 'userId' });
+    };
     return User;
 };

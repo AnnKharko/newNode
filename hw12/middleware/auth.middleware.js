@@ -21,16 +21,20 @@ module.exports = {
             });
 
             // ===== CHECK DATA BASE
-            // const tokens = await O_Auth.findOne({ access_token }).populate('user');
             const tokens = await O_Auth.findAll({
                 where: { access_token }
             });
+
+            // const tokens = await O_Auth.findAll({
+            //     where: { access_token } },
+            //     { include: { models: 'User' } }); // не підтягує юзера
 
             if (!tokens) {
                 throw new ErrorHandler(errorCodesEnum.BAD_REQUEST, errorMessages.NOT_VALID_TOKEN);
             }
 
             req.infoTokens = tokens[0].dataValues.id;
+            req.userId = tokens[0].dataValues.user;
             next();
         } catch (e) {
             next(e);
@@ -52,7 +56,6 @@ module.exports = {
             });
 
             // ===== CHECK DATA BASE
-            // const tokens = await O_Auth.findOne({ refresh_token });
             const tokens = await O_Auth.findAll({
                 where: { refresh_token }
             });
@@ -67,17 +70,22 @@ module.exports = {
             next(e);
         }
     },
-    checkUserRole: (whoHaveAccess = []) => (req, res, next) => {
+    checkUserRole: (whoHaveAccess = []) => async (req, res, next) => {
         try {
-            const { role } = req.user;
+            const User = db.getModel('User');
+            const { userId } = req;
+
+            const user = await User.findAll({ where: { id: userId } });
 
             if (!whoHaveAccess.length) {
                 return next();
             }
 
-            if (!whoHaveAccess.includes(role)) {
+            if (!whoHaveAccess.includes(user[0].dataValues.role)) {
                 throw new ErrorHandler(errorCodesEnum.FORBIDDEN, errorMessages.FORBIDDEN);
             }
+
+            next();
         } catch (e) {
             next(e);
         }

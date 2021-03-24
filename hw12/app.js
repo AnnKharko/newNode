@@ -7,6 +7,7 @@ const path = require('path');
 // require('dotenv').config();
 const dotenv = require('dotenv');
 const db = require('./dataBase/MySQL').getInstance();
+const cronRun = require('./cron-jobs');
 
 dotenv.config({ path: path.join(process.cwd(), '../.env') });
 
@@ -40,14 +41,5 @@ app.use('*', (err, req, res, next) => {
 
 app.listen(PORT, () => {
     console.log(`App listen ${PORT}`);
+    cronRun();
 });
-
-// function _connectDB() {
-//     mongoose.connect(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
-//
-//     const { connection } = mongoose;
-//
-//     connection.on('error', (error) => {
-//         console.log(error);
-//     });
-// }

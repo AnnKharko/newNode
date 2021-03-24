@@ -5,6 +5,7 @@ const { studentMiddleware, authMiddleware } = require('../middleware');
 
 router.get('/', studentController.getAll);
 router.post('/',
+    authMiddleware.checkAccessToken,
     authMiddleware.checkUserRole([
         'admin',
         'manager'
