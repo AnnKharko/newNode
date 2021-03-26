@@ -13,7 +13,6 @@ const authUser = async (userEmail, password, transaction) => {
         throw new Error('NO USER');
     }
 
-    console.log(user[0].dataValues.role);
     await passwordHasher.compare(password, user[0].dataValues.password);
     const tokens = tokenizer(user[0].dataValues.role);
     // ==== SAVE TOKENS TO DB
