@@ -149,7 +149,7 @@ module.exports = {
         yoda: 'error',
     },
     overrides: [{
-        files: ['**/*.spec.ts'],
+        files: ['**/*.test.js'],
         env: {
             jest: true,
         },
