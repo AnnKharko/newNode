@@ -4,12 +4,14 @@ const morgan = require('morgan');
 const path = require('path');
 
 const dotenv = require('dotenv');
+const swaggerUI = require('swagger-ui-express');
 const db = require('./dataBase/MySQL').getInstance();
 const cronRun = require('./cron-jobs');
 const { PORT } = require('./configs/config');
 const apiRouter = require('./router/api.router');
 const deleteTokens = require('./cron-jobs');
 const Sentry = require('./logger/sentry');
+const swaggerDoc = require('./docs/swagger.json');
 
 dotenv.config({ path: path.join(process.cwd(), '../.env') });
 
@@ -25,6 +27,7 @@ app.use(express.static(path.join(process.cwd(), 'static')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 app.use('/', apiRouter);
 
 app.use(Sentry.Handlers.errorHandler());
