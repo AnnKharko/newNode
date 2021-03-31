@@ -89,11 +89,11 @@
         "operationId": "createUser",
         "parameters": [
           {
-            "name": "email",
+            "name": "name",
             "in": "formData",
             "required": true,
             "type": "string",
-            "example": "email@expamle.com"
+            "example": "Anna"
           },
           {
             "name": "age",
@@ -101,6 +101,34 @@
             "required": true,
             "type": "number",
             "example": 18
+          },
+          {
+            "name": "email",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "example": "email@expamle.com"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "example": "vklglig$gutlfiugiyf"
+          },
+          {
+            "name": "gender",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "example": "female"
+          },
+          {
+            "name": "role",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "example": "user"
           }
         ],
         "responses": {
@@ -303,7 +331,6 @@
         }
       }
     }
-  }
   },
     "definitions": {
       "singleUser": {
@@ -374,6 +401,5 @@
           }
         }
       }
-
     }
 }
