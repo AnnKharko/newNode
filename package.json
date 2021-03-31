@@ -28,6 +28,7 @@
     "pug": "^3.0.2",
     "sequelize": "^6.5.1",
     "sequelize-cli": "^6.2.0",
+    "swagger-ui-express": "^4.1.6",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -35,6 +36,7 @@
     "@types/express-fileupload": "^1.1.6",
     "@types/nodemailer": "^6.4.0",
     "@types/sequelize": "^4.28.9",
+    "@types/swagger-ui-express": "^4.1.2 ",
     "eslint": "^7.20.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
